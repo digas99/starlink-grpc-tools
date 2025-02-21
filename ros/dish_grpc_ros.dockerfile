@@ -22,15 +22,17 @@ RUN rosdep init && \
 RUN apt-get update && \
 apt-get install -y ros-galactic-rclpy
 
+# Install required Python packages
+COPY requirements.txt /app/
+RUN pip install --upgrade -r /app/requirements.txt
+
 COPY dish_grpc_ros.py \
 	dish_common.py \
 	starlink_grpc.py \
 	ros/entrypoint.sh \
-	requirements.txt \
 	/app/
 WORKDIR /app
 
-RUN pip install --upgrade -r /app/requirements.txt
 
 ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["dish_grpc_ros.py"]
