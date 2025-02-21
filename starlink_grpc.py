@@ -753,6 +753,14 @@ def get_id(context: Optional[ChannelContext] = None) -> str:
         raise GrpcError(e) from e
 
 
+def all_status_data(context: Optional[ChannelContext] = None):
+    try:
+        status = get_status(context)
+    except (AttributeError, ValueError, grpc.RpcError) as e:
+        raise GrpcError(e) from e
+
+    return status
+
 def status_data(
         context: Optional[ChannelContext] = None) -> Tuple[StatusDict, ObstructionDict, AlertDict]:
     """Fetch current status data.
