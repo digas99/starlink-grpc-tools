@@ -64,6 +64,7 @@ class StarlinkNode(Node):
 
         # pprint.pprint(processed_data)
         msg.data = json.dumps(processed_data, default=self.handle_serialization)
+        msg.data = msg.data.replace('NaN', 'null')
         print(msg.data)
         self.pub.publish(msg)
 
