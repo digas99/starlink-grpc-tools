@@ -20,12 +20,16 @@ def sanitize_value(value):
     
     return value
 
-# TODO: HANDLE ELSE CASE TO DISPLAY NAME OF CLASS
 def handle_serialization(object):
     if isinstance(object, Mapping):
         return {k: handle_serialization(v) for k, v in object.items()}
     elif isinstance(object, Sequence) and not isinstance(object, str):
         return [handle_serialization(v) for v in object]
+    
+    # handle other types not yet covered
+    elif not isinstance(object, str):
+        return "<" + object.__class__.__name__ + ">"
+
     return object
 
 
