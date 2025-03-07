@@ -26,7 +26,12 @@ apt-get install -y ros-galactic-rclpy
 COPY requirements.txt /app/
 RUN pip install --upgrade -r /app/requirements.txt
 
+COPY ros/starlink_ros_node.py \
+    ros/ros_style_logger.py \
+    /app/ros/
+
 COPY dish_grpc_ros.py \
+	dish_grpc_all_data.py \
 	dish_common.py \
 	starlink_grpc.py \
 	ros/entrypoint.sh \

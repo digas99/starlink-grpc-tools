@@ -9,4 +9,4 @@ pypng>=0.0.20
 typing-extensions>=4.3.0
 croniter>=1.0.1
 python-dateutil>=2.7.0
-protobuf
+pymongo==4.11.2
