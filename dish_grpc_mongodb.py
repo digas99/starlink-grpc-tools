@@ -6,7 +6,7 @@ import json
 import time
 
 from argparse import ArgumentParser
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 
 import dish_grpc_all_data as starlink_data
 
@@ -27,11 +27,20 @@ def main():
 
     signal.signal(signal.SIGINT, signal_handler)
 
-    client = MongoClient(MONGODB_HOST, MONGODB_PORT)
+    try:
+        client = MongoClient(MONGODB_HOST, MONGODB_PORT, serverSelectionTimeoutMS=1000)
+        client.server_info()  # Forces a connection attempt
+        print("Connected to MongoDB at %s:%d" % (MONGODB_HOST, MONGODB_PORT))
+    except errors.ServerSelectionTimeoutError as err:
+        print("Failed to connect to MongoDB\n%s" % err)
+        sys.exit(1)
+    except errors.ConnectionFailure as err:
+        print("Failed to connect to MongoDB\n%s" % err)
+        sys.exit(1)
+
     db = client[MONGODB_DB]
     collection = db[MONGODB_COLLECTION]
 
-    print("Connected to MongoDB at %s:%d" % (MONGODB_HOST, MONGODB_PORT))
 
     while True:
         data = starlink_data.fetch_data()
